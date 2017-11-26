@@ -26,9 +26,9 @@ from keras.preprocessing.image import ImageDataGenerator
 os.environ["CUDA_VISIBLE_DEVICES"] = "6"
 
 
-num_cores = 2 
+num_cores = 12 
 
-num_CPU = 2 
+num_CPU = 12 
 num_GPU = 1 
 
 config = tf.ConfigProto(intra_op_parallelism_threads=num_cores,\
@@ -157,7 +157,8 @@ def create_model():
     model.add(Dense(num_class, kernel_regularizer=regularizers.l2(0.01), activation="softmax"))
 
     adam = optimizers.Adam(lr=0.001, beta_1=0.6, beta_2=0.999, epsilon=1e-8, decay=1e-6)
-    model.compile(optimizer=adam, loss="categorical_crossentropy", metrics=["accuracy"])
+    sgd  = optimizers.SGD(lr = 0.1, momentum=0.8, decay=0.1 / 100, nesterov=False)
+    model.compile(optimizer=sgd, loss="categorical_crossentropy", metrics=["accuracy"])
 
     return model
 
